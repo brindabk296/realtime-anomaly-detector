@@ -1,0 +1,22 @@
+services:
+  # API Server Service
+  - type: web
+    name: anomaly-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.api.simple_server:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+    plan: free
+
+  # Dashboard Service
+  - type: web
+    name: anomaly-dashboard
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run src/dashboard/standalone_dashboard.py --server.port 10000 --server.address 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+    plan: free
