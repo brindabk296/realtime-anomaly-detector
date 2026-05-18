@@ -2,6 +2,11 @@ venv/
 __pycache__/
 *.pyc
 *.pkl
+*.U
 .env
 .DS_Store
 *.log
+Lib/
+Scripts/
+include/
+pyvenv.cfg
