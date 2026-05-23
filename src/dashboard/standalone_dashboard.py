@@ -26,53 +26,157 @@ st.set_page_config(
 )
 
 # ============================================
-# CUSTOM CSS FOR BETTER UI
+# CUSTOM CSS WITH UPDATED COLORS
 # ============================================
 st.markdown("""
 <style>
+    /* Main header - changed to blue gradient */
     .main-header {
         text-align: center;
         padding: 1rem;
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
         border-radius: 10px;
         margin-bottom: 2rem;
     }
+    .main-header h1 {
+        color: #ffffff;
+        font-size: 2rem;
+    }
+    .main-header p {
+        color: #cce7e8;
+    }
+    
+    /* Metric cards - new colors */
     .metric-card {
-        background-color: #1e1e2f;
+        background: linear-gradient(135deg, #2c3e50, #3498db);
         padding: 1rem;
-        border-radius: 10px;
+        border-radius: 12px;
         text-align: center;
         border-left: 4px solid;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
     }
-    .critical {
-        background-color: #ff4444;
+    .metric-card:hover {
+        transform: translateY(-3px);
+    }
+    .metric-card h3 {
+        font-size: 1.8rem;
+        margin: 0;
         color: white;
-        padding: 10px;
-        border-radius: 8px;
-        margin: 5px 0;
+    }
+    .metric-card p {
+        margin: 0.5rem 0 0 0;
+        color: #e0e0e0;
+        font-size: 0.85rem;
+    }
+    
+    /* Alert boxes - more vibrant colors */
+    .critical {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        color: white;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin: 8px 0;
+        font-weight: bold;
+        border-left: 5px solid #fcd34d;
+        box-shadow: 0 2px 8px rgba(220,38,38,0.3);
     }
     .warning {
-        background-color: #ffaa44;
-        color: black;
-        padding: 10px;
-        border-radius: 8px;
-        margin: 5px 0;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin: 8px 0;
+        font-weight: bold;
+        border-left: 5px solid #fef3c7;
+        box-shadow: 0 2px 8px rgba(245,158,11,0.3);
     }
     .slow {
-        background-color: #4facfe;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
         color: white;
-        padding: 10px;
-        border-radius: 8px;
-        margin: 5px 0;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin: 8px 0;
+        font-weight: bold;
+        border-left: 5px solid #bfdbfe;
+        box-shadow: 0 2px 8px rgba(59,130,246,0.3);
     }
-    .health-90 { background-color: #00c851; color: white; padding: 5px; border-radius: 5px; text-align: center; }
-    .health-70 { background-color: #ffaa44; color: black; padding: 5px; border-radius: 5px; text-align: center; }
-    .health-low { background-color: #ff4444; color: white; padding: 5px; border-radius: 5px; text-align: center; }
+    
+    /* Sidebar styling - dark slate */
+    .css-1d391kg, [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1e293b, #0f172a);
+    }
+    
+    /* Health score badges */
+    .health-90 { 
+        background: linear-gradient(135deg, #059669, #047857); 
+        color: white; 
+        padding: 5px 10px; 
+        border-radius: 20px; 
+        text-align: center;
+        font-weight: bold;
+    }
+    .health-70 { 
+        background: linear-gradient(135deg, #d97706, #b45309); 
+        color: white; 
+        padding: 5px 10px; 
+        border-radius: 20px; 
+        text-align: center;
+        font-weight: bold;
+    }
+    .health-low { 
+        background: linear-gradient(135deg, #dc2626, #991b1b); 
+        color: white; 
+        padding: 5px 10px; 
+        border-radius: 20px; 
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    /* Divider */
+    hr {
+        margin: 1.5rem 0;
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #3498db, #2c3e50, transparent);
+    }
+    
+    /* Table styling */
+    .stDataFrame {
+        background: #1e293b;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    
+    /* Metric labels */
+    .stMetric {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        border-radius: 10px;
+        padding: 10px;
+    }
+    
+    /* Buttons */
+    .stButton button {
+        background: linear-gradient(135deg, #0f2027, #203a43);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    .stButton button:hover {
+        background: linear-gradient(135deg, #203a43, #2c5364);
+        transform: translateY(-2px);
+    }
+    
+    /* Checkbox */
+    .stCheckbox label {
+        color: #cbd5e1;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # ============================================
-# HEADER
+# HEADER - UPDATED COLORS
 # ============================================
 st.markdown('<div class="main-header"><h1>🚨 Advanced Anomaly Detection System</h1><p>Real-time monitoring • AI-powered detection • Instant alerts</p></div>', unsafe_allow_html=True)
 
@@ -86,7 +190,6 @@ API_URL = os.environ.get('API_URL', 'https://anomaly-api-bnuk.onrender.com')
 # ============================================
 def send_email_alert(anomaly):
     """Send email alert for critical anomalies"""
-    # For demo, we'll just print. Uncomment and add credentials for real emails
     print(f"""
     📧 EMAIL ALERT TRIGGERED
     To: guide@college.edu
@@ -110,8 +213,6 @@ with st.sidebar:
     
     st.markdown("---")
     st.markdown("### 📥 Export Data")
-    
-    # Export button placeholder - will be enabled when data exists
     export_placeholder = st.empty()
     
     st.markdown("---")
@@ -131,7 +232,6 @@ with st.sidebar:
 # ============================================
 @st.cache_data(ttl=5, show_spinner=False)
 def fetch_logs():
-    """Fetch logs from API server"""
     try:
         response = requests.get(f"{API_URL}/logs?limit=500", timeout=10)
         if response.status_code == 200:
@@ -157,7 +257,7 @@ if logs:
     slow_df = df[(df['status_code'] < 400) & (df['latency_ms'] > 2000)]
     
     # ============================================
-    # FEATURE 1: QUICK SUMMARY (LAST HOUR)
+    # QUICK SUMMARY (LAST HOUR)
     # ============================================
     st.subheader("📋 Quick Summary (Last Hour)")
     last_hour = datetime.now() - timedelta(hours=1)
@@ -187,7 +287,7 @@ if logs:
     
     with col1:
         st.markdown(f"""
-        <div class="metric-card" style="border-left-color: #3498db;">
+        <div class="metric-card" style="border-left-color: #00d2ff;">
             <h3>📊 {len(df)}</h3>
             <p>Total Logs</p>
         </div>
@@ -195,16 +295,15 @@ if logs:
     
     with col2:
         st.markdown(f"""
-        <div class="metric-card" style="border-left-color: #e74c3c;">
+        <div class="metric-card" style="border-left-color: #ff6b6b;">
             <h3>🚨 {len(anomalies)}</h3>
             <p>Total Anomalies</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
-        color = "#e74c3c" if rate > 20 else "#f39c12" if rate > 5 else "#2ecc71"
         st.markdown(f"""
-        <div class="metric-card" style="border-left-color: {color};">
+        <div class="metric-card" style="border-left-color: #ffd93d;">
             <h3>⚠️ {rate:.1f}%</h3>
             <p>Anomaly Rate</p>
         </div>
@@ -220,14 +319,14 @@ if logs:
     
     with col5:
         st.markdown(f"""
-        <div class="metric-card" style="border-left-color: #9b59b6;">
+        <div class="metric-card" style="border-left-color: #a855f7;">
             <h3>🏢 {df['service'].nunique()}</h3>
             <p>Services</p>
         </div>
         """, unsafe_allow_html=True)
     
     # ============================================
-    # FEATURE 2: GAUGE CHART (ANOMALY RATE VISUAL)
+    # GAUGE CHART
     # ============================================
     st.subheader("📊 Anomaly Rate Gauge")
     
@@ -237,24 +336,24 @@ if logs:
         title = {'text': "Current Anomaly Rate (%)", 'font': {'size': 24}},
         domain = {'x': [0, 1], 'y': [0, 1]},
         gauge = {
-            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
-            'bar': {'color': "#ff4444" if rate > 20 else "#ffaa44" if rate > 5 else "#00c851"},
+            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#2c3e50"},
+            'bar': {'color': "#ff6b6b" if rate > 20 else "#ffd93d" if rate > 5 else "#00d2ff"},
             'bgcolor': "white",
             'borderwidth': 2,
-            'bordercolor': "gray",
+            'bordercolor': "#2c3e50",
             'steps': [
-                {'range': [0, 5], 'color': 'lightgreen'},
-                {'range': [5, 20], 'color': 'lightyellow'},
-                {'range': [20, 100], 'color': 'lightcoral'}
+                {'range': [0, 5], 'color': '#d4f1f9'},
+                {'range': [5, 20], 'color': '#fff3cd'},
+                {'range': [20, 100], 'color': '#f8d7da'}
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 4},
+                'line': {'color': "#dc2626", 'width': 4},
                 'thickness': 0.75,
                 'value': rate
             }
         }
     ))
-    fig_gauge.update_layout(height=250, margin=dict(l=20, r=20, t=40, b=20))
+    fig_gauge.update_layout(height=250, margin=dict(l=20, r=20, t=40, b=20), paper_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig_gauge, use_container_width=True)
     
     # ============================================
@@ -262,7 +361,6 @@ if logs:
     # ============================================
     st.subheader("🚨 Live Anomaly Alerts")
     
-    # Send alerts for critical anomalies (simulated)
     if len(critical_df) > 0:
         for _, row in critical_df.head(3).iterrows():
             send_email_alert(row)
@@ -292,7 +390,7 @@ if logs:
         st.success("✅ No anomalies detected - System is healthy")
     
     # ============================================
-    # FEATURE 3: SERVICE HEALTH SCORES
+    # SERVICE HEALTH DASHBOARD
     # ============================================
     st.subheader("🏥 Service Health Dashboard")
     
@@ -319,22 +417,21 @@ if logs:
     
     health_df = pd.DataFrame(health_data)
     
-    # Color code the health scores
     def color_health(val):
         if isinstance(val, (int, float)):
             if val >= 90:
-                return 'background-color: #00c851; color: white'
+                return 'background-color: #059669; color: white; border-radius: 20px; padding: 5px 10px;'
             elif val >= 70:
-                return 'background-color: #ffaa44; color: black'
+                return 'background-color: #d97706; color: white; border-radius: 20px; padding: 5px 10px;'
             else:
-                return 'background-color: #ff4444; color: white'
+                return 'background-color: #dc2626; color: white; border-radius: 20px; padding: 5px 10px;'
         return ''
     
     st.dataframe(health_df.style.applymap(color_health, subset=['Health Score']), 
                  use_container_width=True, hide_index=True)
     
     # ============================================
-    # FEATURE 4: ANOMALY TREND CHART
+    # CHARTS ROW
     # ============================================
     col1, col2 = st.columns(2)
     
@@ -343,12 +440,11 @@ if logs:
         if len(anomalies) > 0:
             anomalies['minute'] = anomalies['timestamp'].dt.floor('min')
             trend = anomalies.groupby('minute').size().reset_index(name='count')
-            
             fig = px.line(trend, x='minute', y='count', 
                           title="Anomalies per Minute",
                           markers=True,
-                          color_discrete_sequence=['#ff4444'])
-            fig.update_layout(height=350, plot_bgcolor='white')
+                          color_discrete_sequence=['#ff6b6b'])
+            fig.update_layout(height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No anomalies yet to show trend")
@@ -362,23 +458,23 @@ if logs:
                         color='count', 
                         color_continuous_scale='Reds',
                         text='count')
-            fig.update_layout(height=350, showlegend=False)
+            fig.update_layout(height=350, showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No anomalies to display")
     
     # ============================================
-    # FEATURE 5: LATENCY DISTRIBUTION
+    # LATENCY DISTRIBUTION
     # ============================================
     st.subheader("📊 Latency Distribution")
     fig = px.histogram(df, x='latency_ms', nbins=30, 
                        title="Response Time Distribution",
-                       color_discrete_sequence=['#4facfe'])
-    fig.update_layout(height=350)
+                       color_discrete_sequence=['#00d2ff'])
+    fig.update_layout(height=350, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig, use_container_width=True)
     
     # ============================================
-    # FEATURE 6: RECENT ACTIVITY TABLE
+    # RECENT ACTIVITY TABLE
     # ============================================
     st.subheader("📋 Recent Activity")
     
@@ -406,7 +502,7 @@ if logs:
                  use_container_width=True, hide_index=True)
     
     # ============================================
-    # FEATURE 7: EXPORT TO CSV
+    # EXPORT TO CSV
     # ============================================
     if len(anomalies) > 0:
         csv = anomalies.to_csv(index=False)
@@ -423,7 +519,7 @@ if logs:
     # ============================================
     st.markdown("---")
     st.markdown(f"""
-    <div style="text-align: center; padding: 1rem; color: #888;">
+    <div style="text-align: center; padding: 1rem; color: #94a3b8;">
         <p>🕐 Last updated: {datetime.now().strftime('%H:%M:%S')} | 🔄 Auto-refresh: {'ON' if auto_refresh else 'OFF'}</p>
         <p>🧠 ML Model: Isolation Forest | 📊 Monitoring {df['service'].nunique()} services in real-time</p>
     </div>
