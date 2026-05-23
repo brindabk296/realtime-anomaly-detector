@@ -33,12 +33,12 @@ st.markdown("""
     .main-header {
         text-align: center;
         padding: 1rem;
-        background: light blue;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
         border-radius: 10px;
         margin-bottom: 2rem;
     }
     .metric-card {
-        background-color: black;
+        background-color: #1e1e2f;
         padding: 1rem;
         border-radius: 10px;
         text-align: center;
@@ -64,6 +64,14 @@ st.markdown("""
         padding: 10px;
         border-radius: 8px;
         margin: 5px 0;
+    }
+    .email-alert {
+        background-color: #dc2626;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 8px 0;
+        border-left: 5px solid #fcd34d;
     }
     .health-90 { background-color: #00c851; color: white; padding: 5px; border-radius: 5px; text-align: center; }
     .health-70 { background-color: #ffaa44; color: black; padding: 5px; border-radius: 5px; text-align: center; }
@@ -227,7 +235,7 @@ if logs:
         """, unsafe_allow_html=True)
     
     # ============================================
-    # FEATURE 2: GAUGE CHART (ANOMALY RATE VISUAL)
+    # GAUGE CHART (ANOMALY RATE VISUAL)
     # ============================================
     st.subheader("📊 Anomaly Rate Gauge")
     
@@ -292,7 +300,29 @@ if logs:
         st.success("✅ No anomalies detected - System is healthy")
     
     # ============================================
-    # FEATURE 3: SERVICE HEALTH SCORES
+    # EMAIL ALERTS SECTION (VISUAL ON DASHBOARD)
+    # ============================================
+    st.subheader("📧 Email Notification Log")
+    
+    if len(critical_df) > 0:
+        with st.expander("📧 Recent Email Alerts Sent", expanded=True):
+            for _, row in critical_df.head(5).iterrows():
+                st.markdown(f"""
+                <div class="email-alert">
+                    <strong>📧 EMAIL ALERT SENT</strong><br>
+                    <strong>To:</strong> engineering-team@company.com<br>
+                    <strong>Subject:</strong> 🚨 CRITICAL ALERT - {row['service']}<br>
+                    <strong>Time:</strong> {row['timestamp']}<br>
+                    <strong>Status:</strong> HTTP {row['status_code']} | <strong>Latency:</strong> {row['latency_ms']}ms<br>
+                    <strong>Message:</strong> Service {row['service']} is experiencing critical failures
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        with st.expander("📧 Email Alert Status"):
+            st.success("✅ No critical anomalies detected - No email alerts sent")
+    
+    # ============================================
+    # SERVICE HEALTH DASHBOARD
     # ============================================
     st.subheader("🏥 Service Health Dashboard")
     
@@ -334,15 +364,16 @@ if logs:
                  use_container_width=True, hide_index=True)
     
     # ============================================
-    # FEATURE 4: ANOMALY TREND CHART
+    # ANOMALY TREND CHART
     # ============================================
     col1, col2 = st.columns(2)
     
     with col1:
         st.subheader("📈 Anomaly Trend Over Time")
         if len(anomalies) > 0:
-            anomalies['minute'] = anomalies['timestamp'].dt.floor('min')
-            trend = anomalies.groupby('minute').size().reset_index(name='count')
+            anomalies_copy = anomalies.copy()
+            anomalies_copy['minute'] = anomalies_copy['timestamp'].dt.floor('min')
+            trend = anomalies_copy.groupby('minute').size().reset_index(name='count')
             
             fig = px.line(trend, x='minute', y='count', 
                           title="Anomalies per Minute",
@@ -368,7 +399,7 @@ if logs:
             st.info("No anomalies to display")
     
     # ============================================
-    # FEATURE 5: LATENCY DISTRIBUTION
+    # LATENCY DISTRIBUTION
     # ============================================
     st.subheader("📊 Latency Distribution")
     fig = px.histogram(df, x='latency_ms', nbins=30, 
@@ -378,7 +409,7 @@ if logs:
     st.plotly_chart(fig, use_container_width=True)
     
     # ============================================
-    # FEATURE 6: RECENT ACTIVITY TABLE
+    # RECENT ACTIVITY TABLE
     # ============================================
     st.subheader("📋 Recent Activity")
     
@@ -406,7 +437,7 @@ if logs:
                  use_container_width=True, hide_index=True)
     
     # ============================================
-    # FEATURE 7: EXPORT TO CSV
+    # EXPORT TO CSV
     # ============================================
     if len(anomalies) > 0:
         csv = anomalies.to_csv(index=False)
