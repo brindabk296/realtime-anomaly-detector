@@ -33,12 +33,12 @@ st.markdown("""
     .main-header {
         text-align: center;
         padding: 1rem;
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        background: black;
         border-radius: 10px;
         margin-bottom: 2rem;
     }
     .metric-card {
-        background-color: #1e1e2f;
+        background-color: light blue;
         padding: 1rem;
         border-radius: 10px;
         text-align: center;
